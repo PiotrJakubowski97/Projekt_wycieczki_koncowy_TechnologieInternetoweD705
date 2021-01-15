@@ -1,0 +1,59 @@
+﻿@model Projekt_wycieczki_koncowy.Models.Models_together
+
+@{
+    ViewBag.Title = "Szczegóły wycieczki";
+}
+
+    <div id="modal" class="modal" tabindex="-1" role="dialog">
+
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal">x</button>
+                    </div>
+                    <div class="text-center">
+                        <h3>Wycieczka z <b>@Model.WycieczkiTog.Msc_start</b> do  <b>@Model.WycieczkiTog.Msc_end</b></h3>
+                        <h4><b>Data startu wycieczki:</b> @Html.DisplayFor(c => c.WycieczkiTog.Data)</h4>
+
+                        <h5><b>Liczba przebytych kilometrów:</b> @Model.WycieczkiTog.Liczba_km</h5>
+                        <h5><b>Czas trwania wycieczki w dniach:</b> @Model.WycieczkiTog.Liczba_dni</h5>
+                        <h4><b>Galeria</b></h4>
+                        @{bool czy_jest = false;
+                            foreach (var item in Model.WycieczkiTogEnum)
+                            {
+
+                                foreach (var item2 in Model.ImagesTogEnum)
+                                {
+                                    if (item.Id == item2.WycieczkaID && Model.WycieczkiTog.Id == item2.WycieczkaID)
+                                    {
+                                        <img src="@Url.Content(item2.ImgData)" width="350" height="250" />
+                                        <p></p>
+                                        czy_jest = true;
+                                    }
+                                }
+                            }
+                            if (czy_jest == false)
+                            {
+                                @Html.Raw("- brak -");
+                            }
+                        }
+                        <h4><b>Plik wideo</b></h4>
+                        @if (!string.IsNullOrWhiteSpace(Model.WycieczkiTog.VideoFile))
+                        {
+                            <video width="320" height="225" controls alt="test">
+                                <source src="@Url.Content(Model.WycieczkiTog.VideoFile)" type="video/mp4" a />
+                            </video>
+                        }
+                        else
+                        {
+                            @Html.Raw("- brak -")
+                        }
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Zamknij</button>
+                </div>
+            </div>
+        </div>
+    </div>

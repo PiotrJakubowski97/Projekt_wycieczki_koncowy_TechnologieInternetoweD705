@@ -1,0 +1,183 @@
+﻿@model Projekt_wycieczki_koncowy.Models.Wycieczki
+
+@{
+    ViewBag.Title = "Dodaj nową wycieczke";
+}
+
+<h2>Tworzenie wpisu o nowej wycieczce</h2>
+
+@using (Html.BeginForm("Create", "Wycieczkis", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.Msc_start, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Msc_start, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Msc_start, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Msc_end, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Msc_end, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Msc_end, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Data, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Data, new { htmlAttributes = new { @class = "form-control", @type = "date" } })
+            @Html.ValidationMessageFor(model => model.Data, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Liczba_km, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Liczba_km, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Liczba_km, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Liczba_dni, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Liczba_dni, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Liczba_dni, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    
+    <div class="form-group">
+        @Html.LabelFor(model => model.Images, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <input type="file" name="ImgData" id="ImgData" multiple="multiple" accept="image/png,image/jpg,image/jpeg" onchange="Clear()" />
+            <p id="demo"> Pliki w formacie(jpg,jpeg,png), max ilość:6, min ilość:1</p>
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.VideoFile, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <input type="file" name="VideoFile" id="VideoFile" accept="video/mp4,video/x-m4v,video/*" onchange="Clear2()" />
+            <p id="demo2"> Plik w formacie mp4</p>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Dodaj" class="btn btn-success" onclick="return chechMedia();" />
+            <br />
+            <br />
+            <button type="button" class="btn btn-warning" onclick="location.href='@Url.Action("Index","Wycieczkis")'">Powrót do listy wycieczek</button>
+        </div>
+    </div>
+</div>
+
+}
+
+
+    
+
+    
+@section scripts
+{
+    <script type="text/javascript">
+        function Clear()
+        {
+            var uploadFiles = document.getElementById("ImgData")
+            if (uploadFiles.files.length > 0) {
+                document.getElementById("demo").innerHTML = "";
+                return true;
+            }
+            else
+            {
+                document.getElementById("demo").innerHTML = "Pliki w formacie(jpg,jpeg,png), max ilość:6, min ilość:1";
+            }
+            return false;
+        }
+        function Clear2()
+        {
+            var uploadFiles = document.getElementById("VideoFile")
+            if (uploadFiles.files.length > 0) {
+                document.getElementById("demo2").innerHTML = "";
+                return true;
+            }
+            else
+            {
+                document.getElementById("demo").innerHTML = "Plik w formacie mp4";
+            }
+            return false;
+        }
+
+
+        function chechMedia() {
+
+            val1 = checkImg();
+
+            val2 = checkVideo();
+
+            if (val1 == false || val2 == false) {
+;
+                return false;
+            }
+            else
+                return true;
+        }
+    function checkVideo() {
+        var uploadFiles = document.getElementById("VideoFile")
+        var fileName = uploadFiles.value,
+            idxDot = fileName.lastIndexOf(".") + 1,
+            extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+        if (uploadFiles.files.length > 0) {
+            if (extFile == "mp4") {
+                return true;
+            } else {
+                document.getElementById("demo2").innerHTML = "Zły format filmu(wymagany mp4)";
+                return false;
+            }
+        }
+        return true;
+          
+    }
+    function checkImg() {
+        var uploadFiles = document.getElementById("ImgData")
+        var fileName = uploadFiles.value,
+            idxDot = fileName.lastIndexOf(".") + 1,
+            extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+        if (uploadFiles.files.length > 0)
+        {
+            if (extFile == "jpg" || extFile == "jpeg" || extFile == "png")
+            {
+                if (uploadFiles.files.length > 6)
+                {
+                    document.getElementById("demo").innerHTML = "Zbyt dużo zdjęć(max 6)";
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            } else
+            {
+                document.getElementById("demo").innerHTML = "Zły rodzaj pliku(dozwolone jpg,jpeg,png)";
+                return false;
+            }
+        }
+        else
+
+        {
+            document.getElementById("demo").innerHTML = "Brak plików";
+            return false;
+        }
+        
+          
+    }
+    </script>
+}

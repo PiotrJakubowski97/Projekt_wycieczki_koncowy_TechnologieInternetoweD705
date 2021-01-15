@@ -1,0 +1,156 @@
+﻿@model Projekt_wycieczki_koncowy.Models.Models_together
+
+@{
+    ViewBag.Title = "Wycieczki";
+}
+
+<p>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <button type="button" class="btn btn-success" onclick="location.href='@Url.Action("Create", "Wycieczkis")'">Dodaj Twoją nową wycieczkę !</button>
+    }
+</p>
+<center>
+    <h2>Lista wszystkich wycieczek</h2>
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <h4><font color="red">Zaloguj się, aby dodać nowy wpis o Twojej wyciecze.</font></h4>
+    }
+</center>
+@{
+    var fromDate = ViewBag.fromDate as DateTime?;
+    var toDate = ViewBag.toDate as DateTime?;
+}
+@using (Html.BeginForm(FormMethod.Get))
+{
+    <center>
+        <hr />
+        <h4>Wyszukaj wycieczki po dacie</h4>
+
+        <div>Od:@Html.TextBox("fromDate", fromDate == null ? "" : string.Format("{0:dd MMM yyy}", fromDate.Value), new { @class = "DatePicker", @type = "date" }) Do:@Html.TextBox("toDate", toDate == null ? "" : string.Format("{0:dd MMM yyy}", toDate.Value), new { @class = "DatePicker", @type = "date" })     <input type="submit" class="btn btn-success" value="Szukaj" /><button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("Index", "Wycieczkis")'">Wyczyść filtr</button></div>
+        <hr />
+    </center>
+
+
+
+
+    <table class="table">
+        <tr>
+            <th>
+                Miejsce startowe
+            </th>
+            <th>
+                Miejsce końcowe
+            </th>
+            <th>
+                Data wycieczki
+            </th>
+            <th>
+                Liczba kilometrów
+            </th>
+            <th>
+                Liczba dni
+            </th>
+            <th>
+                Zdjęcia
+            </th>
+            <th>
+                Wideo
+            </th>
+            <th>
+                Opcje
+            </th>
+        </tr>
+
+        @foreach (var item in Model.WycieczkiTogEnum)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Msc_start)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Msc_end)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Data)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Liczba_km)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Liczba_dni)
+                </td>
+                <td>
+                    @{ bool czy_jest = false;
+                        foreach (var item2 in Model.ImagesTogEnum)
+                        {
+                            if (item.Id == item2.WycieczkaID)
+                            {
+                                <img src="@Url.Content(item2.ImgData)" width="25" height="25" />
+                                czy_jest = true;
+                            }
+                        }
+                        if (czy_jest == false)
+                        {
+                            @Html.Raw("- brak -");
+                        }
+                    }
+                </td>
+                <td>
+                    @if (item.VideoFile == null)
+                    {
+                        @Html.Raw("- brak -")
+                    }
+                    else
+                    {
+                        @Html.Raw("- dodano - ");
+                    }
+                </td>
+                <td>
+                    <center>
+                        @Html.ActionLink("Szczegóły", "Details", new { id = item.Id }, new { @class = "btn btn-info" })
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                        {
+                            <button type="button" class="btn btn-warning" onclick="location.href='@Url.Action("Edit", "Wycieczkis", new { id = item.Id })'">Edytuj</button>
+                        }
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                        {
+                            <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("Delete", "Wycieczkis", new { id = item.Id })'">Usuń</button>
+                        }
+                    </center>
+                </td>
+            </tr>
+        }
+
+    </table>
+}
+@section scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".DatePicker").datepicker({
+                dateFormat: 'dd M yy',
+                changeMonth: true,
+                changeYear: true,
+            });
+        });
+    </script>
+    <script>
+        $(function () {
+
+            $('body').on('click', 'a.btn-info', function (e) {
+
+                e.preventDefault();
+
+                $("#modal").remove();
+
+                var url = $(this).attr("href");
+
+                $.get(url, function (data) {
+                    $(data).modal();
+                });
+            });
+
+        });
+    </script>
+}

@@ -1,0 +1,112 @@
+﻿@model Projekt_wycieczki_koncowy.Models.Models_together
+
+@{
+    ViewBag.Title = "Usuń wycieczke";
+}
+
+<center><h3>Czy jesteś pewien, ze chcesz usunąć wpis?</h3></center>
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            Miejsce początkowe
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.WycieczkiTog.Msc_start)
+            <hr />
+        </dd>
+
+        <dt>
+            Miejsce końcowe
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.WycieczkiTog.Msc_end)
+            <hr />
+        </dd>
+
+        <dt>
+            Data wycieczki
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.WycieczkiTog.Data)
+            <hr />
+        </dd>
+
+        <dt>
+            Liczba kilometrów
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.WycieczkiTog.Liczba_km)
+            <hr />
+        </dd>
+
+        <dt>
+            Liczba dni
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.WycieczkiTog.Liczba_dni)
+            <hr />
+        </dd>
+
+        <dt>
+            Zdjęcia
+        </dt>
+
+        <dd>
+            @{bool czy_jest = false;
+                foreach (var item in Model.WycieczkiTogEnum)
+                {
+
+                    foreach (var item2 in Model.ImagesTogEnum)
+                    {
+                        if (item.Id == item2.WycieczkaID && Model.WycieczkiTog.Id == item2.WycieczkaID)
+                        {
+                            <img src="@Url.Content(item2.ImgData)" width="205" height="125" />
+                            czy_jest = true;
+                        }
+                    }
+                }
+                if (czy_jest == false)
+                {
+                    @Html.Raw("- brak -");
+                }
+            }
+            <hr />
+        </dd>
+
+        <dt>
+            Wideo
+        </dt>
+
+        <dd>
+            @if (!string.IsNullOrWhiteSpace(Model.WycieczkiTog.VideoFile))
+            {
+                <video width="205" height="125" controls alt="test">
+                    <source src="@Url.Content(Model.WycieczkiTog.VideoFile)" type="video/mp4" a />
+                </video>
+            }
+            else
+            {
+                @Html.Raw("- brak -")
+            }
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+<center>
+    <div class="form-actions no-color">
+        <button type="submit" class="btn btn-danger">Usuń wpis o wyprawie</button>
+        <button type="button" class="btn btn-warning" onclick="location.href='@Url.Action("Index","Wycieczkis")'">Powrót do listy wycieczek</button>
+        
+    </div>
+</center>
+
+    }
+</div>

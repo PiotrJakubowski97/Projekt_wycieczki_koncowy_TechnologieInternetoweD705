@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="aac93130296c43809a638177281e9169" Name="Diagram1">
+        <EntityTypeShape EntityType="projekt_baza_danych_wycieczkiModel.User" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="projekt_baza_danych_wycieczkiModel.Images" Width="1.5" PointX="6" PointY="1.375" />
+        <EntityTypeShape EntityType="projekt_baza_danych_wycieczkiModel.sysdiagrams" Width="1.5" PointX="0.75" PointY="3.75" />
+        <EntityTypeShape EntityType="projekt_baza_danych_wycieczkiModel.Wycieczki" Width="1.5" PointX="3.75" PointY="1" />
+        <AssociationConnector Association="projekt_baza_danych_wycieczkiModel.FK_Images_Wycieczki" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

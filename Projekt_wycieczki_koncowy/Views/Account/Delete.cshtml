@@ -1,0 +1,47 @@
+﻿@model Projekt_wycieczki_koncowy.Models.User
+
+@{
+    ViewBag.Title = "DeleteUser";
+}
+
+<h3>Czy jesteś pewien, że chcesz usunąć użytkownika?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.UserName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Password)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Password)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Rola)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Rola)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-danger" /> 
+            <br />
+
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>
